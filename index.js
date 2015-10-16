@@ -1,6 +1,9 @@
 var express = require('express')
 var ads     = require('ads');
 var mqtt    = require('mqtt');
+var config  = require('./config.json');
+
+console.log(config.listen);
 
 // Make connection with MQTT server
 var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
@@ -18,10 +21,18 @@ console.log('use ads config', options);
 
 // Listen for ADS events
 var adsClient = ads.connect(options, function() {
-    this.notify({
+    for(var i=0; i < config.listen.length; i++) {
+        var symbol = config.listen[i];
+        console.log('-->', symbol);
+        this.notify({
+            symname: symbol,
+            bytelength: ads.BOOL,
+        });
+    }
+    /*this.notify({
         symname: '.lLivingSalon',
         bytelength: ads.BOOL,
-    });
+    });*/
 });
 adsClient.on('notification', function(handle){
     console.log(handle.value);
