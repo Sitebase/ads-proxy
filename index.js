@@ -35,7 +35,7 @@ var adsClient = ads.connect(options, function() {
     });*/
 });
 adsClient.on('notification', function(handle){
-    console.log(handle.value);
+    console.log('received: ' + handle.symname + ' => ' + handle.value);
     value = handle.value;
     if(mqttClient) {
         mqttClient.publish('plc' + handle.symname.toLowerCase(), value.toString());
