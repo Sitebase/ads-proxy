@@ -1,0 +1,35 @@
+{
+  "name": "ads-proxy",
+  "version": "0.1.0",
+  "description": "Connect ADS to MQTT using this proxy",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sitebase/ads-proxy.git"
+  },
+  "keywords": [
+    "ads",
+    "beckhoff",
+    "plc",
+    "home",
+    "automation",
+    "domotica",
+    "proxy",
+    "mqtt",
+    "openhab"
+  ],
+  "author": "Wim Mostmans (http://www.sitebase.be/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sitebase/ads-proxy/issues"
+  },
+  "homepage": "https://github.com/Sitebase/ads-proxy#readme",
+  "dependencies": {
+    "ads": "^0.1.4",
+    "express": "^4.13.3",
+    "mqtt": "^1.4.3"
+  }
+}
