@@ -1,61 +1,51 @@
 var express = require('express')
-var ads = require('ads');
+var ads     = require('ads');
 var mqtt    = require('mqtt');
-var app = express();
-var value = 0;
 
-// EXPRESS
-app.set('port', (process.env.PORT || 5000))
-app.use(express.static(__dirname + '/public'))
-
-app.get('/', function(request, response) {
-  response.send('Value is: ' + value);
-})
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'))
-})
-
-// MQTT
-var client  = mqtt.connect('mqtt://192.168.1.117');
-
-client.on('connect', function () {
-    //client.subscribe('presence');
-    client.publish('presence', 'Hello mqtt');
-});
+// Make connection with MQTT server
+var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
+mqttClient.on('connect', function(){});
 
 // ADS
 var options = {
     host: "192.168.1.199",
     amsNetIdTarget: "5.27.137.214.1.1",
-    amsNetIdSource: "192.168.1.111.1.1",
-    //amsNetIdSource: "192.168.1.117.1.1",
+    amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.111.1.1",
     amsPortTarget: 851
 };
 
-var myHandle = {
-    symname: '.lLivingSalon',
-    bytelength: ads.BOOL,
-};
+console.log('use ads config', options);
 
-ads = ads.connect(options, function() {
-    this.notify(myHandle);
+// Listen for ADS events
+var adsClient = ads.connect(options, function() {
+    this.notify({
+        symname: '.lLivingSalon',
+        bytelength: ads.BOOL,
+    });
 });
-
-ads.on('notification', function(handle){
+adsClient.on('notification', function(handle){
     console.log(handle.value);
     value = handle.value;
-    if(client) {
-        client.publish('plc' + handle.symname.toLowerCase(), value.toString());
+    if(mqttClient) {
+        mqttClient.publish('plc' + handle.symname.toLowerCase(), value.toString());
     }
 });
 
-process.on('exit', function () {
-    console.log("exit");
+// Express page
+var app = express();
+app.set('port', (process.env.PORT || 5000))
+app.use(express.static(__dirname + '/public'))
+app.get('/', function(request, response) {
+    response.send('useless page to run this on dokku :)');
+});
+app.listen(app.get('port'), function() {
+    console.log("Node app is running at localhost:" + app.get('port'))
 });
 
+// Clean up code
 process.on('SIGINT', function() {
-    ads.end(function() {
+    mqttClient.end();
+    adsClient.end(function() {
         process.exit();
     });
 });
