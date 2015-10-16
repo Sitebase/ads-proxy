@@ -7,7 +7,30 @@ console.log(config.listen);
 
 // Make connection with MQTT server
 var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
-mqttClient.on('connect', function(){});
+mqttClient.on('connect', function(){
+    mqttClient.subscribe('hello');
+});
+mqttClient.on('message', function (topic, message) {
+    console.log(topic, message.toString());
+
+    if(!adsClient)
+        return;
+
+    // toggle output
+    var myHandle = {
+        symname: message.toString(),
+        bytelength: ads.BOOL,
+        propname: 'value',
+        value: false
+    };
+    adsClient.write(myHandle, function(err, handle) {
+        myHandle.value = !myHandle.value;
+        adsClient.write(myHandle, function(err, handle) {
+            if(err)
+                console.log('ERROR', err);
+        });
+    });
+});
 
 // ADS
 var options = {
@@ -23,7 +46,6 @@ console.log('use ads config', options);
 var adsClient = ads.connect(options, function() {
     for(var i=0; i < config.listen.length; i++) {
         var symbol = config.listen[i];
-        console.log('-->', symbol);
         this.notify({
             symname: symbol,
             bytelength: ads.BOOL,

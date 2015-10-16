@@ -16,6 +16,8 @@ dokku config:set node-js-app ADS_SOURCE_IP=192.168.1.117.1.1
 ```
 
 ## Debug
-
 * View dokku logs `dokku logs node-js-app -t`
 * Use [MQTT.fx](http://www.jensd.de/apps/mqttfx/) to debug MQTT messages
+
+## Tests
+Publish `hello` with value `.cToggleOfficeLight`
