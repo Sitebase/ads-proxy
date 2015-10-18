@@ -81,6 +81,10 @@ app.listen(app.get('port'), function() {
 
 // OpenHAB switch update using API
 // curl -s "http://server.lan:8080/CMD?LivingLight=ON"
+// curl -s "http://server.lan:8080/rest/items/kLivingCirkelLichtReserveKnop3?type=json"
+// for the moment all buttons are seens as toggles
+// I thing we can make this auto detectable if we fetch openhab items and see what type the specific symbol has
+// if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
     value = value == 1 ? "ON" : "OFF"
@@ -89,11 +93,26 @@ function sendUpdate(name, value)
     name = name.replace('.', '');
 
     console.log('SEND', name, value);
-    request('http://192.168.1.117:8080/CMD?' + name + '=' + value, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            //console.log(body) // Show the HTML for the Google homepage.
+    request('http://192.168.1.117:8080/rest/items/' + name + '?type=json', function (error, response, body) {
+
+        if(error || response.statusCode !== 200) {
+            console.log('fetch state failed');
+            return;
         }
-    })
+
+        // do a toggle
+        var currentState = body.state;
+        if(currentState === 'ON' && value === 'ON')
+            value = 'OFF';
+            
+        console.log('current', currentState, value);
+
+        request('http://192.168.1.117:8080/CMD?' + name + '=' + value, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                //console.log(body) // Show the HTML for the Google homepage.
+            }
+        })
+    });
 }
 
 // Clean up code
