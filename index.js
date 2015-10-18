@@ -83,7 +83,7 @@ app.listen(app.get('port'), function() {
 // curl -s "http://server.lan:8080/CMD?LivingLight=ON"
 function sendUpdate(name, value)
 {
-    value == 1 ? "ON" : "OFF"
+    value = value == 1 ? "ON" : "OFF"
 
     // clean up name
     name = name.replace('.', '');
