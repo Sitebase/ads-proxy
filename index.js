@@ -59,7 +59,6 @@ var adsClient = ads.connect(options, function() {
 });
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
-
     sendUpdate(handle.symname, handle.value);
     // fallback via API because MQTT binding is for the moment not yet
     // working in my OpenHAB config
@@ -87,6 +86,11 @@ app.listen(app.get('port'), function() {
 // if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
+
+    // for toggles we can ignore all off values
+    if(value == 0)
+        return;
+
     value = value == 1 ? "ON" : "OFF"
 
     // clean up name
@@ -101,10 +105,11 @@ function sendUpdate(name, value)
         }
 
         // do a toggle
-        var currentState = body.state;
+        var data = JSON.parse(body);
+        var currentState = data.state;
         if(currentState === 'ON' && value === 'ON')
             value = 'OFF';
-            
+
         console.log('current', currentState, value);
 
         request('http://192.168.1.117:8080/CMD?' + name + '=' + value, function (error, response, body) {
