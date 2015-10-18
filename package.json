@@ -30,6 +30,7 @@
   "dependencies": {
     "ads": "^0.1.4",
     "express": "^4.13.3",
-    "mqtt": "^1.4.3"
+    "mqtt": "^1.4.3",
+    "request": "^2.65.0"
   }
 }

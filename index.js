@@ -1,6 +1,7 @@
 var express = require('express')
 var ads     = require('ads');
 var mqtt    = require('mqtt');
+var request = require('request');
 var config  = require('./config.json');
 
 console.log(config.listen);
@@ -58,10 +59,13 @@ var adsClient = ads.connect(options, function() {
 });
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
-    value = handle.value;
-    if(mqttClient) {
+
+    sendUpdate(handle.symname, handle.value);
+    // fallback via API because MQTT binding is for the moment not yet
+    // working in my OpenHAB config
+    /*if(mqttClient) {
         mqttClient.publish('plc' + handle.symname.toLowerCase(), value.toString());
-    }
+    }*/
 });
 
 // Express page
@@ -74,6 +78,23 @@ app.get('/', function(request, response) {
 app.listen(app.get('port'), function() {
     console.log("Node app is running at localhost:" + app.get('port'))
 });
+
+// OpenHAB switch update using API
+// curl -s "http://server.lan:8080/CMD?LivingLight=ON"
+function sendUpdate(name, value)
+{
+    value == 1 ? "ON" : "OFF"
+
+    // clean up name
+    name = name.replace('.', '');
+
+    console.log('SEND', name, value);
+    request('http://192.168.1.117:8080/CMD?LivingLight=' + value, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            //console.log(body) // Show the HTML for the Google homepage.
+        }
+    })
+}
 
 // Clean up code
 process.on('SIGINT', function() {
