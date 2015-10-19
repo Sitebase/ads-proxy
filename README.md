@@ -21,3 +21,7 @@ dokku config:set node-js-app ADS_SOURCE_IP=192.168.1.117.1.1
 
 ## Tests
 Publish `hello` with value `.cToggleOfficeLight`
+
+## Todo
+When ads or other connection throws error the applications crashes. It should auto restart
+or retry connections
