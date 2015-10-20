@@ -52,10 +52,6 @@ var adsClient = ads.connect(options, function() {
             bytelength: ads.BOOL,
         });
     }
-    /*this.notify({
-        symname: '.lLivingSalon',
-        bytelength: ads.BOOL,
-    });*/
 });
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
