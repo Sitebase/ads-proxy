@@ -20,7 +20,19 @@ mqttClient.on('message', function (topic, message) {
     if(!adsClient)
         return;
 
-    toggleSymbolState(adsClient, data.symbol);
+    // if the action is toggle, we don't care about the current state
+    if(data.action.toLowerCase() === 'toggle' || data.stateSymbol === '') {
+        toggleSymbolState(adsClient, data.symbol);
+    } else {
+        readSymbolState(adsClient, data.stateSymbol, function(value) {
+            console.log('READ', data.action.toLowerCase(), value);
+            if(
+                (data.action.toLowerCase() === 'on' && value == '0') ||
+                (data.action.toLowerCase() === 'off' && value == '1')
+            )
+                toggleSymbolState(adsClient, data.symbol);
+        });
+    }
 });
 
 // ADS
@@ -124,6 +136,19 @@ function toggleSymbolState(client, symbol)
             if(err)
                 console.log('ERROR', err);
         });
+    });
+}
+
+function readSymbolState(client, symbol, callback)
+{
+    var myHandle = {
+        symname: symbol.toString(),
+        bytelength: ads.BOOL,
+        propname: 'value'
+    };
+    client.read(myHandle, function(err, handle) {
+        console.log('value is', handle);
+        callback(handle.value);
     });
 }
 
