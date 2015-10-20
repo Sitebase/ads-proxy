@@ -126,7 +126,7 @@ function toggleSymbolState(client, symbol)
         symname: symbol.toString(),
         bytelength: ads.BOOL,
         propname: 'value',
-        value: false
+        value: true
     };
     client.write(myHandle, function(err, handle) {
         if(err)
