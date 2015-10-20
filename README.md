@@ -23,7 +23,4 @@ dokku config:set node-js-app ADS_SOURCE_IP=192.168.1.117.1.1
 Publish `hello` with value `.cToggleOfficeLight`
 
 ## Todo
-* When ads or other connection throws error the applications crashes. It should auto restart
-or retry connections
-* Add support for toggle/on/off, on and off can be done by reading the current state of a symbol
-and then decide to do a toggle or not. This way we only need one symbol for three actions.
+* When stop PLC program connection is lost, when starting again the proxy doesn't work anymore because it lost connection
