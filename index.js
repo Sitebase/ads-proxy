@@ -131,15 +131,11 @@ function toggleSymbolState(client, symbol)
     client.write(myHandle, function(err, handle) {
         if(err)
             console.log('ERROR', err);
-        else
-            console.log('write', myHandle.value, handle);
         myHandle.value = !myHandle.value;
         setTimeout(function() {
             client.write(myHandle, function(err, handle) {
                 if(err)
                     console.log('ERROR', err);
-                else
-                    console.log('write', myHandle.value, handle);
             });
         }, 50);
     });
