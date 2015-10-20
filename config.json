@@ -162,6 +162,7 @@
         ".kWaskotAanZijdeurSensorCarport",
         ".kWaskotAanZijdeurSensorHelling",
         ".kWaskotNaarGarageLicht",
-        ".kWcBenedenLicht"
+        ".kWcBenedenLicht",
+        ".cToggleOfficeLight"
     ]
 }
