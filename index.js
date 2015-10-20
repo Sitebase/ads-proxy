@@ -12,25 +12,15 @@ mqttClient.on('connect', function(){
     mqttClient.subscribe('hello');
 });
 mqttClient.on('message', function (topic, message) {
-    console.log(topic, message.toString());
+
+    var data = JSON.parse(message);
+
+    console.log(topic, data);
 
     if(!adsClient)
         return;
 
-    // toggle output
-    var myHandle = {
-        symname: message.toString(),
-        bytelength: ads.BOOL,
-        propname: 'value',
-        value: false
-    };
-    adsClient.write(myHandle, function(err, handle) {
-        myHandle.value = !myHandle.value;
-        adsClient.write(myHandle, function(err, handle) {
-            if(err)
-                console.log('ERROR', err);
-        });
-    });
+    toggleSymbolState(adsClient, data.symbol);
 });
 
 // ADS
@@ -40,8 +30,6 @@ var options = {
     amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.111.1.1",
     amsPortTarget: 851
 };
-
-console.log('use ads config', options);
 
 // Listen for ADS events
 var adsClient = ads.connect(options, function() {
@@ -117,6 +105,25 @@ function sendUpdate(name, value)
                 //console.log(body) // Show the HTML for the Google homepage.
             }
         })
+    });
+}
+
+function toggleSymbolState(client, symbol)
+{
+    var myHandle = {
+        symname: symbol.toString(),
+        bytelength: ads.BOOL,
+        propname: 'value',
+        value: false
+    };
+    client.write(myHandle, function(err, handle) {
+        if(err)
+            console.log('ERROR', err);
+        myHandle.value = !myHandle.value;
+        client.write(myHandle, function(err, handle) {
+            if(err)
+                console.log('ERROR', err);
+        });
     });
 }
 
