@@ -29,8 +29,10 @@ mqttClient.on('message', function (topic, message) {
             if(
                 (data.action.toLowerCase() === 'on' && value == '0') ||
                 (data.action.toLowerCase() === 'off' && value == '1')
-            )
+            ) {
+                console.log('trigger toggle');
                 toggleSymbolState(adsClient, data.symbol);
+            }
         });
     }
 });
@@ -53,9 +55,11 @@ var adsClient = ads.connect(options, function() {
         });
     }
 });
+var state = {};
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
     sendUpdate(handle.symname, handle.value);
+    state[handle.symname] = handle.value;
     // fallback via API because MQTT binding is for the moment not yet
     // working in my OpenHAB config
     /*if(mqttClient) {
@@ -127,11 +131,17 @@ function toggleSymbolState(client, symbol)
     client.write(myHandle, function(err, handle) {
         if(err)
             console.log('ERROR', err);
+        else
+            console.log('write', myHandle.value, handle);
         myHandle.value = !myHandle.value;
-        client.write(myHandle, function(err, handle) {
-            if(err)
-                console.log('ERROR', err);
-        });
+        setTimeout(function() {
+            client.write(myHandle, function(err, handle) {
+                if(err)
+                    console.log('ERROR', err);
+                else
+                    console.log('write', myHandle.value, handle);
+            });
+        }, 50);
     });
 }
 
