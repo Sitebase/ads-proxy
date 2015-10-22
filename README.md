@@ -15,7 +15,6 @@ Now under I/O Devices click on Image and go to the ADS tab. Check the `Enable AD
 Download the new configuration and make sure you reboot your PLC.
 
 2. Now add a static route to our Beckhoff PLC. The route should point to your server that will run the proxy application.
-
 It's also a good idea to add an extra static route that points to your local development device. This way you can test out the proxy from your development device too.
 
 3. Add an environment variable to your Dokku application that specifies the ADS source IP. This is the static route you've configured in the previous step.
