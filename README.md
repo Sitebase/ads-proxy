@@ -9,7 +9,6 @@ ADS proxy will help me to control my PLC using MQTT. The main reason I need this
 I personally run this on my server using [Dokku](http://progrium.viewdocs.io/dokku/). This makes it super easy to deploy a new version.
 
 ## Configuration
-
 1. Enable ADS on your PLC project. To do this click on your task and then enable the checkbox before `Create symbols`.
 Now under I/O Devices click on Image and go to the ADS tab. Check the `Enable ADS Server` and also `Create symbols`.
 Download the new configuration and make sure you reboot your PLC.
