@@ -95,10 +95,13 @@ app.listen(app.get('port'), function() {
 
 // fetch sonos state
 var speakers = {};
+var keuken = null;
 sonos.search(function(device) {
     device.deviceDescription(function(err, info) {
         console.log('found speaker', info.roomName);
         speakers[info.roomName] = device;
+        if(info.roomName === 'Keuken')
+            keuken = device;
     });
 });
 function getSpeaker(name) {
@@ -123,6 +126,7 @@ function speakerToggle() {
 function speakerChangeVolume(alpha) {
     var speaker = getSpeaker('Keuken');
     console.log('change volume of', speaker);
+    console.log('change volume of 2', keuken);
     if(speaker) {
         speaker.getVolume(function(err, value) {
             console.log('speaker is', value, value + alpha);
