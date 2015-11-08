@@ -1,5 +1,6 @@
 var express = require('express')
 var ads     = require('ads');
+var sonos    = require('sonos');
 var mqtt    = require('mqtt');
 var request = require('request');
 var config  = require('./config.json');
@@ -58,13 +59,27 @@ var adsClient = ads.connect(options, function() {
 var state = {};
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
+
+    // sonos
+    if(handle.value === 1) {
+        switch(handle.symname) {
+            case ".kLivingCirkelLichtReserveKnop3":
+                speakerToggle();
+                break;
+            case ".kLivingCirkelLichtReserveKnop4":
+                console.log('pause');
+                break;
+            case ".kLivingCirkelReserveLinksKnop3":
+                speakerChangeVolume(-5);
+                break;
+            case ".kLivingCirkelReserveLinksKnop4":
+                speakerChangeVolume(+5);
+                break;
+        }
+    }
+
     sendUpdate(handle.symname, handle.value);
     state[handle.symname] = handle.value;
-    // fallback via API because MQTT binding is for the moment not yet
-    // working in my OpenHAB config
-    /*if(mqttClient) {
-        mqttClient.publish('plc' + handle.symname.toLowerCase(), value.toString());
-    }*/
 });
 
 // Express page
@@ -78,6 +93,52 @@ app.listen(app.get('port'), function() {
     console.log("Node app is running at localhost:" + app.get('port'))
 });
 
+// fetch sonos state
+var speakers = {};
+sonos.search(function(device) {
+    device.deviceDescription(function(err, info) {
+        console.log(info.roomName);
+        speakers[info.roomName] = device;
+    });
+});
+function getSpeaker(name) {
+    if(speakers.hasOwnProperty(name))
+        return speakers[name];
+
+    return null;
+}
+function speakerToggle() {
+    var speaker = getSpeaker('Keuken');
+    if(speaker) {
+        speaker.getCurrentState(function(err, value) {
+            console.log('state is', value);
+            if(value === 'playing') {
+                speaker.pause(console.log);
+            } else {
+                speaker.play("http://www.coreybarksdale.com/Music/Metallica/Metallica%20-%20Sad%20But%20True.mp3", console.log);
+            }
+        });
+    }
+}
+function speakerChangeVolume(alpha) {
+    var speaker = getSpeaker('Keuken');
+    if(speaker) {
+        speaker.getVolume(function(err, value) {
+            console.log('speaker is', value, value + alpha);
+            var volume = value + alpha;
+            speaker.setVolume(volume, console.log);
+        });
+    }
+}
+
+
+/*setTimeout(function() {
+    console.log('change');
+    var speaker = getSpeaker('Keuken');
+    if(speaker)
+        speaker.play("http://www.coreybarksdale.com/Music/Metallica/Metallica%20-%20Sad%20But%20True.mp3", console.log);
+}, 4000);*/
+
 // OpenHAB switch update using API
 // curl -s "http://server.lan:8080/CMD?LivingLight=ON"
 // curl -s "http://server.lan:8080/rest/items/kLivingCirkelLichtReserveKnop3?type=json"
@@ -86,6 +147,9 @@ app.listen(app.get('port'), function() {
 // if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
+
+    // don't update for the moment
+    return;
 
     // for toggles we can ignore all off values
     if(value == 0)
