@@ -122,12 +122,15 @@ function speakerToggle() {
 }
 function speakerChangeVolume(alpha) {
     var speaker = getSpeaker('Keuken');
+    console.log('change volume of', speaker);
     if(speaker) {
         speaker.getVolume(function(err, value) {
             console.log('speaker is', value, value + alpha);
             var volume = value + alpha;
             speaker.setVolume(volume, console.log);
         });
+    } else {
+        console.log('speaker not found');
     }
 }
 
