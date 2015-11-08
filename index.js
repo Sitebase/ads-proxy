@@ -92,6 +92,7 @@ app.listen(app.get('port'), function() {
 });
 
 // fetch sonos state
+console.log('Start fetch speakers');
 var speakers = {};
 var keuken = null;
 sonos.search(function(device) {
