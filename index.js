@@ -97,7 +97,7 @@ app.listen(app.get('port'), function() {
 var speakers = {};
 sonos.search(function(device) {
     device.deviceDescription(function(err, info) {
-        console.log(info.roomName);
+        console.log('found speaker', info.roomName);
         speakers[info.roomName] = device;
     });
 });
@@ -147,10 +147,6 @@ function speakerChangeVolume(alpha) {
 // if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
-
-    // don't update for the moment
-    return;
-
     // for toggles we can ignore all off values
     if(value == 0)
         return;
