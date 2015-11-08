@@ -97,6 +97,7 @@ app.listen(app.get('port'), function() {
 var speakers = {};
 var keuken = null;
 sonos.search(function(device) {
+    console.log('device found', device);
     device.deviceDescription(function(err, info) {
         console.log('found speaker', info.roomName);
         speakers[info.roomName] = device;
