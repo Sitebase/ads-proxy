@@ -112,6 +112,7 @@ function getSpeaker(name) {
 }
 function speakerToggle() {
     var speaker = getSpeaker('Keuken');
+    console.log('speaker is toggle', speaker);
     if(speaker) {
         speaker.getCurrentState(function(err, value) {
             console.log('state is', value);
@@ -126,7 +127,7 @@ function speakerToggle() {
 function speakerChangeVolume(alpha) {
     var speaker = getSpeaker('Keuken');
     console.log('change volume of', speaker);
-    console.log('change volume of 2', keuken);
+    console.log('change volume of 2', speakers);
     if(speaker) {
         speaker.getVolume(function(err, value) {
             console.log('speaker is', value, value + alpha);
