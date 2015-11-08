@@ -5,10 +5,8 @@ var mqtt    = require('mqtt');
 var request = require('request');
 var config  = require('./config.json');
 
-console.log(config.listen);
-
 // Make connection with MQTT server
-var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
+/*var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
 mqttClient.on('connect', function(){
     mqttClient.subscribe('hello');
 });
@@ -36,7 +34,7 @@ mqttClient.on('message', function (topic, message) {
             }
         });
     }
-});
+});*/
 
 // ADS
 var options = {
