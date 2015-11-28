@@ -54,7 +54,6 @@ var adsClient = ads.connect(options, function() {
         });
     }
 });
-var state = {};
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
 
@@ -79,6 +78,14 @@ adsClient.on('notification', function(handle){
     sendUpdate(handle.symname, handle.value);
     state[handle.symname] = handle.value;
 });
+
+// connection check
+adsClient.on('error', function(error) {
+    console.log('connection lost, try to create new connection');
+});
+setInterval(function() {
+    adsClient.readDeviceInfo(function(){});
+}, 3000);
 
 // Express page
 var app = express();
@@ -155,6 +162,8 @@ function speakerChangeVolume(alpha) {
 // if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
+    return;
+
     // for toggles we can ignore all off values
     if(value == 0)
         return;
