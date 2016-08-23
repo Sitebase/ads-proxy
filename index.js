@@ -7,7 +7,7 @@ var config  = require('./config.json');
 console.log(config.listen);
 
 // Make connection with MQTT server
-var mqttClient  = mqtt.connect('mqtt://192.168.1.117');
+var mqttClient  = mqtt.connect('mqtt://192.168.1.116');
 mqttClient.on('connect', function(){
     mqttClient.subscribe('hello');
 });
@@ -39,9 +39,9 @@ mqttClient.on('message', function (topic, message) {
 
 // ADS
 var options = {
-    host: "192.168.1.199",
+    host: "192.168.1.126",
     amsNetIdTarget: "5.27.137.214.1.1",
-    amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.111.1.1",
+    amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.116.1.1",
     amsPortTarget: 851
 };
 
