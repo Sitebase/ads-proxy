@@ -87,6 +87,8 @@ app.listen(app.get('port'), function() {
 function sendUpdate(name, value)
 {
 
+    console.log('send update', name, value);
+    return;
     // for toggles we can ignore all off values
     if(value == 0)
         return;
