@@ -38,6 +38,12 @@ client.on('notification', function(handle){
     console.log(handle.value);
 });
 
+client.on('error', function(error) {
+    console.log('*****************************');
+    console.log(error);
+    console.log('*****************************');
+});
+
 process.on('exit', function () {
     console.log("exit");
 });
