@@ -59,13 +59,13 @@ var adsClient = ads.connect(options, function() {
 var state = {};
 adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
-    sendUpdate(handle.symname, handle.value);
-    state[handle.symname] = handle.value;
+    // sendUpdate(handle.symname, handle.value);
+    // state[handle.symname] = handle.value;
     // fallback via API because MQTT binding is for the moment not yet
     // working in my OpenHAB config
-    /*if(mqttClient) {
-        mqttClient.publish('plc' + handle.symname.toLowerCase(), value.toString());
-    }*/
+    if(mqttClient) {
+        mqttClient.publish('/plc/' + handle.symname.toLowerCase(), value.toString());
+    }
 });
 
 // Express page
