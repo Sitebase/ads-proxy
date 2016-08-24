@@ -64,7 +64,7 @@ adsClient.on('notification', function(handle){
     // fallback via API because MQTT binding is for the moment not yet
     // working in my OpenHAB config
     if(mqttClient) {
-        mqttClient.publish('/plc/' + handle.symname.toLowerCase(), value.toString());
+        mqttClient.publish('/plc/' + handle.symname.toLowerCase(), handle.value.toString());
     }
 });
 
