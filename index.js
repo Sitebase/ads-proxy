@@ -38,6 +38,7 @@ mqttClient.on('message', function (topic, message) {
     }
 });
 
+console.log('connect with', process.env.ADS_SOURCE_IP);
 // ADS
 var options = {
     host: "192.168.1.126",
