@@ -10,7 +10,7 @@ console.log(config.listen);
 var mqttClient  = mqtt.connect('mqtt://192.168.1.116');
 mqttClient.on('connect', function(){
     mqttClient.subscribe('hello');
-    mqttClient.publish('/test', 'test from dokku');
+    mqttClient.publish('home', 'test from dokku');
 });
 mqttClient.on('message', function (topic, message) {
 
@@ -42,7 +42,7 @@ mqttClient.on('message', function (topic, message) {
 var options = {
     host: "192.168.1.126",
     amsNetIdTarget: "5.27.137.214.1.1",
-    amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.116.1.1",
+    amsNetIdSource: process.env.ADS_SOURCE_IP || "192.168.1.111.1.1",
     amsPortTarget: 851
 };
 
@@ -61,10 +61,13 @@ adsClient.on('notification', function(handle){
     console.log('received: ' + handle.symname + ' => ' + handle.value);
     // sendUpdate(handle.symname, handle.value);
     // state[handle.symname] = handle.value;
-    // fallback via API because MQTT binding is for the moment not yet
-    // working in my OpenHAB config
+
     if(mqttClient) {
-        mqttClient.publish('/plc/' + handle.symname.toLowerCase(), handle.value.toString());
+        var data = {
+            symbol: handle.symname,
+            value: handle.value
+        };
+        mqttClient.publish('home/' + handle.symname.toLowerCase(), JSON.stringify(data));
     }
 });
 
@@ -87,9 +90,9 @@ app.listen(app.get('port'), function() {
 // if it's a switch - it's a toggle button
 function sendUpdate(name, value)
 {
-
-    console.log('send update', name, value);
+    // block this stuff for now
     return;
+
     // for toggles we can ignore all off values
     if(value == 0)
         return;
