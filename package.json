@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Connect ADS to MQTT using this proxy",
   "main": "index.js",
+  "engines":{
+    "node": "6.4.0"
+  },
   "scripts": {
     "start": "node index.js"
   },
