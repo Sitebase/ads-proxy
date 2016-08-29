@@ -19,7 +19,7 @@ I use this proxy in combination with a [Beckhoff CX5020](https://www.beckhoff.co
 
 ## Requirements
 * Beckhoff PLC that has an ethernet connection and is connected to your LAN
-    * Make your you give the PLC a fixed IP address because this node server will need to know the IP address of the PLC
+    * Make your you give the PLC a fixed IP address
     * Make sure you can ping the PLC from another computer
 * MQTT broker: you can install one on your own server or use one of the cloud MQTT broker providers
 * Local server that has NodeJS 6.4.0 installed
