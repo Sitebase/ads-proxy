@@ -1,8 +1,17 @@
 # ADS Proxy [![Build Status](https://travis-ci.org/Sitebase/ads-proxy.svg?branch=master)](https://travis-ci.org/Sitebase/ads-proxy)
-ADS proxy will help me to control my PLC using MQTT.
-The main reason I need this is because I want to use OpenHAB in combination with my PLC (Beckhoff CX5020).
-With this little proxy and can use the existing MQTT binding to do this.
-Also the usage of such a well known pubsub system enables me to easily hook in sensors using ESP8266 or Arduino.
+ADS proxy will help me to control my PLC using [MQTT](http://mqtt.org/).
+The main reason I need this proxy is so I can easily listen for PLC events without having to develop an ADS client for each device or programming language that I want to use it in.
+MQTT is a widely know and has libraries for almost all languages and devices.
+
+## Examples use cases
+* Use OpenHAB to control you PLC symbols
+* ESP8266 garden sprinkler systems that can be controlled by wall switches in the kitchen
+* ESP8266 movement sensor that activates symbol in the PLC (to turn on a light for example)
+* ESP8266 temperature and humidity sensor that updates symbols in the PLC
+* Control my [Sonos](http://www.sonos.com/en-gb) speakers using my wall switches
+
+## My PLC
+I use this proxy in combination with a [Beckhoff CX5020](https://www.beckhoff.com/english.asp?embedded_pc/cx5010_cx5020.htm) but any other [Beckhoff PLC](http://www.beckhoff.com/) with a ethernet connection will work.
 
 ## Data flow diagram
 
