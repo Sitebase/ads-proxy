@@ -22,6 +22,23 @@ It's also a good idea to add an extra static route that points to your local dev
 dokku config:set node-js-app ADS_SOURCE_IP=192.168.1.117.1.1
 ```
 
+## Development
+Add a `.env` file with following content to the repository root.
+If you use autoenv this file will be sourced when going to this directory in command line.
+
+```
+# auto switch local system to the correct version of node
+nvm use `node -pe "var p = require('./package.json'); (p.engines && p.engines.node || 'default').replace(/\.x/gi, '');"`
+
+export MQTT_SERVER=192.168.1.116
+export ADS_SOURCE_NET_ID=192.168.1.111.1.1
+export ADS_TARGET_NET_ID=5.27.137.214.1.1
+export ADS_TARGET_IP=192.168.1.126
+export DEBUG=1
+```
+
+Now run `npm start` to run the project.
+
 ## Debug
 * View dokku logs `dokku logs node-js-app -t`
 * Use [MQTT.fx](http://www.jensd.de/apps/mqttfx/) to debug MQTT messages
@@ -29,5 +46,3 @@ dokku config:set node-js-app ADS_SOURCE_IP=192.168.1.117.1.1
 ## Tests
 Publish `hello` with value `.cToggleOfficeLight`
 
-## Todo
-* When stop PLC program connection is lost, when starting again the proxy doesn't work anymore because it lost connection
