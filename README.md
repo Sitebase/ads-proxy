@@ -45,6 +45,11 @@ export DEBUG=1
 
 Now run `npm start` to run the project.
 
+## Unit tests
+```
+npm test
+```
+
 ## Debug
 * View dokku logs `dokku logs [app name] -t`
 * Use [MQTT.fx](http://www.jensd.de/apps/mqttfx/) to debug MQTT messages
