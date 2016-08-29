@@ -15,7 +15,7 @@ I use this proxy in combination with a [Beckhoff CX5020](https://www.beckhoff.co
 
 ## Data flow diagram
 
-![Diagram](diagram.jpg)
+![Diagram](diagram.png)
 
 ## How to run
 I personally run this on my server using [Dokku](http://progrium.viewdocs.io/dokku/). This makes it super easy to deploy a new version.
