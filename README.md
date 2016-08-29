@@ -1,4 +1,4 @@
-# ADS Proxy
+# ADS Proxy [![Build Status](https://travis-ci.org/Sitebase/ads-proxy.svg?branch=master)](https://travis-ci.org/Sitebase/ads-proxy)
 ADS proxy will help me to control my PLC using MQTT.
 The main reason I need this is because I want to use OpenHAB in combination with my PLC (Beckhoff CX5020).
 With this little proxy and can use the existing MQTT binding to do this.
