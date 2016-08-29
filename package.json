@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "description": "Connect ADS to MQTT using this proxy",
   "main": "index.js",
-  "engines":{
+  "engines": {
     "node": "6.4.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "./node_modules/.bin/mocha test/"
   },
   "repository": {
     "type": "git",
@@ -35,5 +36,8 @@
     "express": "^4.13.3",
     "mqtt": "^1.4.3",
     "request": "^2.65.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2"
   }
 }
